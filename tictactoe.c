@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "tictactoe.h"
+#include <stdlib.h>
+#include <time.h>
 
 // Fill board with empty spaces
 void init_board(char board[MAX][MAX], int n) {
@@ -133,3 +135,17 @@ void log_move(FILE *fp, int move_no, char symbol, int r, int c, char board[MAX][
     log_board(fp, board, n);
 }
 
+// Computer chooses a random valid move
+int get_computer_move(char board[MAX][MAX], int n, int *r, int *c) {
+    int tries = 0;
+    do {
+        *r = rand() % n;
+        *c = rand() % n;
+        tries++;
+    } while (!is_valid_move(board, n, *r, *c) && tries < n*n);
+
+    if (is_valid_move(board, n, *r, *c)) {
+        return 1; // success
+    }
+    return 0; // no valid move (should only happen on full board)
+}

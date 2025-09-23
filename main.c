@@ -1,9 +1,20 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "tictactoe.h"
 
 int main() {
     char board[MAX][MAX];
-    int n;
+    int n, mode;
+
+    srand(time(NULL)); // seed for random numbers
+
+    // Choose game mode
+    printf("Select game mode:\n");
+    printf("1. Player vs Player\n");
+    printf("2. Player vs Computer\n");
+    printf("Enter choice: ");
+    scanf("%d", &mode);
 
     // Get board size
     printf("Enter board size (3 to 10): ");
@@ -20,7 +31,8 @@ int main() {
     if (!logf) {
         printf("Warning: could not open log file!\n");
     } else {
-        fprintf(logf, "\n=== New Game Started (Board %dx%d) ===\n", n, n);
+        fprintf(logf, "\n=== New Game Started (Board %dx%d, Mode: %s) ===\n",
+                n, n, (mode == 1) ? "P vs P" : "P vs C");
         log_board(logf, board, n);
     }
 
@@ -33,11 +45,20 @@ int main() {
 
         int r, c;
         char symbol = (turn == 0) ? 'X' : 'O';
-        printf("Player %c, enter the row,PRESS ENTER and enter the column,PRESS ENTER (1-%d): ", symbol, n);
-        scanf("%d %d", &r, &c);
 
-        // Convert to 0-based index
-        r--; c--;
+        if (mode == 1 || (mode == 2 && turn == 0)) {
+            // Human move
+            printf("Player %c, enter row, Press Enter and enter column, Press Enter (1-%d): ", symbol, n);
+            scanf("%d %d", &r, &c);
+            r--; c--; // convert to 0-based
+        } else {
+            // Computer move
+            if (!get_computer_move(board, n, &r, &c)) {
+                printf("No valid moves for computer.\n");
+                break;
+            }
+            printf("Computer plays at (%d,%d)\n", r+1, c+1);
+        }
 
         if (!is_valid_move(board, n, r, c)) {
             printf("Invalid move. Try again.\n");

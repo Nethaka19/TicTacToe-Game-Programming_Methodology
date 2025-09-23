@@ -15,5 +15,7 @@ int check_draw(char board[MAX][MAX], int n);
 void log_board(FILE *fp, char board[MAX][MAX], int n);
 void log_move(FILE *fp, int move_no, char symbol, int r, int c, char board[MAX][MAX], int n);
 
-#endif
+// Computer
+int get_computer_move(char board[MAX][MAX], int n, int *r, int *c);
 
+#endif
