@@ -103,3 +103,33 @@ int check_draw(char board[MAX][MAX], int n) {
     }
     return 1; // no empty cells
 }
+
+// Log the entire board to a file
+void log_board(FILE *fp, char board[MAX][MAX], int n) {
+    if (!fp) return;
+    fprintf(fp, "\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            fprintf(fp, " %c ", board[i][j]);
+            if (j < n - 1) fprintf(fp, "|");
+        }
+        fprintf(fp, "\n");
+        if (i < n - 1) {
+            for (int j = 0; j < n; j++) {
+                fprintf(fp, "---");
+                if (j < n - 1) fprintf(fp, "+");
+            }
+            fprintf(fp, "\n");
+        }
+    }
+    fprintf(fp, "\n");
+    fflush(fp);
+}
+
+// Log a single move + updated board
+void log_move(FILE *fp, int move_no, char symbol, int r, int c, char board[MAX][MAX], int n) {
+    if (!fp) return;
+    fprintf(fp, "Move %d: Player %c placed at (%d,%d)\n", move_no, symbol, r+1, c+1);
+    log_board(fp, board, n);
+}
+
