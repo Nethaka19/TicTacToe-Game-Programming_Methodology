@@ -3,11 +3,13 @@
 #include <time.h>
 #include "tictactoe.h"
 
+
+// Menu and Gameplay
 int main() {
     char board[MAX][MAX];
     int n, mode;
 
-    srand(time(NULL)); // seed for random numbers
+    srand(time(NULL));
 
     // Choose game mode
     printf("Select game mode:\n");
@@ -36,10 +38,11 @@ int main() {
         log_board(logf, board, n);
     }
 
-    int turn = 0; // 0 = Player X, 1 = Player O
-    int game_over = 0;
-    int move_no = 0;
+    int turn = 0;       // 0 = Player X, 1 = Player O (or Computer)
+    int move_no = 0;    // Count of total moves
+    int game_over = 0;  // Flag to stop when game ends
 
+    // Main game loop
     while (!game_over) {
         display_board(board, n);
 
@@ -47,45 +50,44 @@ int main() {
         char symbol = (turn == 0) ? 'X' : 'O';
 
         if (mode == 1 || (mode == 2 && turn == 0)) {
-            // Human move
-            printf("Player %c, enter row, Press Enter and enter column, Press Enter (1-%d): ", symbol, n);
+            // Human player's turn
+            printf("Player %c, enter row and column (1-%d): ", symbol, n);
             scanf("%d %d", &r, &c);
-            r--; c--; // convert to 0-based
+            r--; c--;
         } else {
-            // Computer move
+            // Computer's turn
             if (!get_computer_move(board, n, &r, &c)) {
                 printf("No valid moves for computer.\n");
                 break;
             }
-            printf("Computer plays at (%d,%d)\n", r+1, c+1);
+            printf("Computer plays at (%d,%d)\n", r + 1, c + 1);
         }
 
+        // Validate move
         if (!is_valid_move(board, n, r, c)) {
             printf("Invalid move. Try again.\n");
-            continue; // retry same player
+            continue;
         }
 
+        // Apply move
         make_move(board, r, c, symbol);
         move_no++;
 
         // Log the move
         if (logf) log_move(logf, move_no, symbol, r, c, board, n);
 
-        // Check win
+        // Check for win/draw
         if (check_win(board, n, r, c, symbol)) {
             display_board(board, n);
             printf("Player %c wins!\n", symbol);
             if (logf) fprintf(logf, "Player %c wins!\n", symbol);
             game_over = 1;
-        }
-        // Check draw
-        else if (check_draw(board, n)) {
+        } else if (check_draw(board, n)) {
             display_board(board, n);
             printf("It's a draw!\n");
             if (logf) fprintf(logf, "Game ended in a draw.\n");
             game_over = 1;
-        }
-        else {
+        } else {
             // Switch turn
             turn = 1 - turn;
         }
@@ -96,6 +98,7 @@ int main() {
         fclose(logf);
     }
 
+    printf("\nGame log saved to 'game_log.txt'.\n");
     return 0;
 }
 

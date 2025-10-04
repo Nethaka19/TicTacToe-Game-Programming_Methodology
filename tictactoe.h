@@ -1,9 +1,11 @@
 #ifndef TICTACTOE_H
 #define TICTACTOE_H
 
-#define MAX 10   // maximum board size allowed
+#include <stdio.h>
 
-//Board + Gameplay
+#define MAX 10  // Maximum board size (3x3 to 10x10)
+
+// Board + Gameplay
 void init_board(char board[MAX][MAX], int n);
 void display_board(char board[MAX][MAX], int n);
 int is_valid_move(char board[MAX][MAX], int n, int r, int c);
@@ -19,3 +21,4 @@ void log_move(FILE *fp, int move_no, char symbol, int r, int c, char board[MAX][
 int get_computer_move(char board[MAX][MAX], int n, int *r, int *c);
 
 #endif
+
