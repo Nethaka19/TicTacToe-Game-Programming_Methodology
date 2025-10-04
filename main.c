@@ -18,17 +18,21 @@ int main(void) {
     if (mode < 1 || mode > 3) mode = 1;
 
     // Board size
-    printf("Enter board size (3–10): ");
-    if (scanf("%d", &n) != 1 || n < 3 || n > 10) {
-        n = 3;
-        printf("Invalid size, defaulting to 3x3.\n");
-    }
-
-    // Restrict small boards for 3-player mode
-    if (mode == 3 && n < 5) {
-        printf("For 3-player mode, minimum board size is 5. Using 5x5.\n");
-        n = 5;
-    }
+    if (mode == 3) {
+    do {
+        printf("Enter board size (5–10): ");
+        scanf("%d", &n);
+        if (n < 5 || n > 10)
+            printf("Invalid size. Please enter between 5 and 10.\n");
+    } while (n < 5 || n > 10);
+} else {
+    do {
+        printf("Enter board size (3–10): ");
+        scanf("%d", &n);
+        if (n < 3 || n > 10)
+            printf("Invalid size. Please enter between 3 and 10.\n");
+    } while (n < 3 || n > 10);
+}
 
     // allocate dynamic board
     char **board = create_board(n);
@@ -46,16 +50,28 @@ int main(void) {
     int numPlayers = (mode == 3) ? 3 : 2;
     int human[3] = {0,0,0};
 
-    if (mode == 1) { human[0] = human[1] = 1; }
-    else if (mode == 2) { human[0] = 1; human[1] = 0; }
+    if (mode == 1) {
+	    //Player vs Player
+	    human[0] = human[1] = 1; }
+    else if (mode == 2) {
+	    //Player vs Computer
+	    human[0] = 1; human[1] = 0; }
     else {
+         //Three Player mode
+        int humanCount = 0;
         for (int i = 0; i < 3; i++) {
             char ans;
-            printf("Is Player %c human? (y/n): ", symbols[i]);
+            printf("Is Player %c human? (Y/N): ", symbols[i]);
             scanf(" %c", &ans);
-            human[i] = (ans=='y'||ans=='Y');
+            human[i] = (ans == 'y' || ans == 'Y');
+            if (human[i]) humanCount++;
         }
-        if (!human[0] && !human[1] && !human[2]) human[0] = 1;
+
+        // Enforce at least one human
+        if (humanCount == 0) {
+            printf("At least one player must be human! Setting Player %c as human.\n", symbols[0]);
+            human[0] = 1;
+        }
     }
 
     int turn=0, move_no=0, game_over=0;
@@ -65,7 +81,7 @@ int main(void) {
         int r=-1, c=-1;
 
         if (human[turn]) {
-            printf("Player %c enter row and column (1-%d): ", sym, n);
+            printf("Player %c enter row and then column (1-%d): ", sym, n);
             scanf("%d %d", &r, &c);
             r--; c--;
         } else {
