@@ -9,11 +9,11 @@ int main(void) {
     srand((unsigned) time(NULL));
 
     // Choose mode
-    printf("Select game mode:\n");
+    printf("Select Game Mode:\n");
     printf(" 1. Player vs Player\n");
     printf(" 2. Player vs Computer\n");
-    printf(" 3. Three Players (mix humans/computers)\n");
-    printf("Enter choice: ");
+    printf(" 3. Three Player Mode\n");
+    printf("Enter the choice: ");
     if (scanf("%d", &mode) != 1) mode = 1;
     if (mode < 1 || mode > 3) mode = 1;
 
@@ -100,13 +100,13 @@ int main(void) {
 
         if (check_win(board,n,r,c,sym)) {
             display_board(board,n);
-            printf("Player %c wins!\n", sym);
-            if (logf) fprintf(logf,"Player %c wins!\n",sym);
+            printf("Player %c Wins.Congratulations!\n", sym);
+            if (logf) fprintf(logf,"Player %c Wins.Congratulations!\n",sym);
             game_over=1;
         } else if (check_draw(board,n)) {
             display_board(board,n);
-            printf("It's a draw!\n");
-            if (logf) fprintf(logf,"Game ended in draw.\n");
+            printf("It's a Draw!\n");
+            if (logf) fprintf(logf,"Game ended in Draw.\n");
             game_over=1;
         } else {
             turn = (turn+1)%numPlayers;

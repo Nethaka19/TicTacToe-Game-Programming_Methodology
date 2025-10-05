@@ -60,7 +60,11 @@ void make_move(char **board, int r, int c, char symbol) {
 
 // check win condition (3 in a row on 3×3, else 4 in a row)
 int check_win(char **board, int n, int last_r, int last_c, char symbol) {
-    int k = (n == 3) ? 3 : 4; //k= win length
+    int k;
+    if (n == 3)
+ 	 k = 3;
+else
+       k = 4; //k= win length
     int count;
 
     // Row
