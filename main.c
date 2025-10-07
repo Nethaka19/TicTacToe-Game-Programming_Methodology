@@ -9,13 +9,23 @@ int main(void) {
     srand((unsigned) time(NULL));
 
     // Choose mode
-    printf("Select Game Mode:\n");
-    printf(" 1. Player vs Player\n");
-    printf(" 2. Player vs Computer\n");
-    printf(" 3. Three Player Mode\n");
-    printf("Enter the choice: ");
-    if (scanf("%d", &mode) != 1) mode = 1;
-    if (mode < 1 || mode > 3) mode = 1;
+    do {
+        printf("Select Game Mode:\n");
+        printf(" 1. Player vs Player\n");
+        printf(" 2. Player vs Computer\n");
+        printf(" 3. Three Player Mode\n");
+        printf("Enter the choice: ");
+
+        if (scanf("%d", &mode) != 1) {
+            while (getchar() != '\n');
+            printf("Invalid input. Please enter a number (1, 2, or 3).\n\n");
+            mode = 0;
+        } 
+        else if (mode < 1 || mode > 3) {
+            printf("Invalid choice. Please select 1, 2, or 3.\n\n");
+        }
+
+    } while (mode < 1 || mode > 3);
 
     // Board size
     if (mode == 3) {
@@ -33,6 +43,13 @@ int main(void) {
             printf("Invalid size. Please enter between 3 and 10.\n");
     } while (n < 3 || n > 10);
 }
+
+//To Win Message
+if (n == 3) {
+        printf("\nYou need to place 3 in a row to win!\n\n");
+    } else {
+        printf("\nYou need to place 4 in a row to win!\n\n");
+    }
 
     // allocate dynamic board
     char **board = create_board(n);
